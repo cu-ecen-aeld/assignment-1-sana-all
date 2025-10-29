@@ -1,20 +1,22 @@
-#!/bin/bash
-
+#!/bin/sh
 if [ $# -ne 2 ]; then
-    echo "error: Both parameters (file name and content) must be specified."
-    exit 1
-fi
+      echo "Invalid Number of arguments, please specify filepath and content"
+      exit 1
+else
+        writefile=$1
+	writestr=$2
+	directory_path="${writefile%/*}"
+	
+	if [ "$directory_path" != "$writefile" ]; then
+		mkdir -p "$directory_path"
+	fi
 
-writefile="$1"
-writestr="$2"
+	echo "$writestr" > "$writefile"
 
-# it will create directory, even if you include filename like sample.txt it will just create the directories not the files
-mkdir -p "$(dirname "$writefile")"
-
-# write the content to the file and automatically creates files
-echo "$writestr" > "$writefile"
-
-if [ $? -ne 0 ]; then
-    echo "error: cant write '$writestr' in '$writefile'."
-    exit 1
+	if [ ! -f "$writefile" ]; then
+		echo "File couldn't be created, please check"
+                exit 1
+	else
+		echo "Success"
+	fi
 fi
